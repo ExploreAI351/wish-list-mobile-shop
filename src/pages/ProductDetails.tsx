@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -7,7 +6,7 @@ import Navbar from '@/components/layout/Navbar';
 import { Button } from '@/components/ui/button';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { Heart, ArrowLeft } from 'lucide-react';
+import { Heart, ArrowLeft, ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const ProductDetails = () => {

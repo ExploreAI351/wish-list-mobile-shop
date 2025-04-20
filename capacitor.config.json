@@ -1,0 +1,10 @@
+
+{
+  "appId": "app.lovable.55cef8c163e54124b44e5e8ed91634e3",
+  "appName": "wish-list-mobile-shop",
+  "webDir": "dist",
+  "server": {
+    "url": "",
+    "cleartext": true
+  }
+}
