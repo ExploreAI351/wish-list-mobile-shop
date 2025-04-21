@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 interface DashboardCardProps {
   title: string;
-  icon: string;
+  icon: keyof typeof Ionicons.glyphMap;
   color: string;
   onPress: () => void;
 }

@@ -2,9 +2,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useWishlist } from '../../contexts/WishlistContext';
-import { useAuth } from '../../contexts/AuthContext';
 import { Product } from '../../types/product';
+import { useWishlist } from '../../contexts/WishlistContext';
 
 interface ProductCardProps {
   product: Product;
@@ -12,62 +11,47 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, navigation }: ProductCardProps) => {
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  const { currentUser } = useAuth();
-  
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const isWishlisted = isInWishlist(product.id);
-  
+
   const handleWishlistToggle = () => {
-    if (!currentUser) {
-      navigation.navigate('Login');
-      return;
-    }
-    
     if (isWishlisted) {
       removeFromWishlist(product.id);
     } else {
       addToWishlist(product);
     }
   };
-  
+
   return (
     <TouchableOpacity
-      style={styles.card}
+      style={styles.container}
       onPress={() => navigation.navigate('ProductDetails', { id: product.id })}
     >
       <View style={styles.imageContainer}>
-        <Image
-          source={{ uri: product.image }}
-          style={styles.image}
-          resizeMode="cover"
-        />
+        <Image source={{ uri: product.image }} style={styles.image} resizeMode="cover" />
         <TouchableOpacity
           style={styles.wishlistButton}
           onPress={handleWishlistToggle}
         >
           <Ionicons
-            name={isWishlisted ? "heart" : "heart-outline"}
+            name={isWishlisted ? 'heart' : 'heart-outline'}
             size={20}
-            color={isWishlisted ? "#9b87f5" : "#666"}
+            color={isWishlisted ? '#ec4899' : '#fff'}
           />
         </TouchableOpacity>
       </View>
-      
-      <View style={styles.cardContent}>
-        <Text style={styles.productName} numberOfLines={1}>
+      <View style={styles.infoContainer}>
+        <Text style={styles.name} numberOfLines={1}>
           {product.name}
         </Text>
-        <Text style={styles.productCategory} numberOfLines={1}>
+        <Text style={styles.category} numberOfLines={1}>
           {product.category}
         </Text>
-        
-        <View style={styles.priceContainer}>
-          <Text style={styles.productPrice}>
-            ${product.price.toFixed(2)}
-          </Text>
+        <View style={styles.priceRow}>
+          <Text style={styles.price}>${product.price.toFixed(2)}</Text>
           <View style={styles.ratingContainer}>
             <Ionicons name="star" size={12} color="#FFD700" />
-            <Text style={styles.ratingText}>{product.rating || 4.0}</Text>
+            <Text style={styles.rating}>{product.rating || 4}</Text>
           </View>
         </View>
       </View>
@@ -76,21 +60,22 @@ const ProductCard = ({ product, navigation }: ProductCardProps) => {
 };
 
 const styles = StyleSheet.create({
-  card: {
-    flex: 1,
-    margin: 8,
+  container: {
+    width: '100%',
     backgroundColor: '#fff',
     borderRadius: 12,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: 4,
     elevation: 2,
+    marginBottom: 16,
   },
   imageContainer: {
-    position: 'relative',
+    width: '100%',
     height: 150,
+    position: 'relative',
   },
   image: {
     width: '100%',
@@ -100,33 +85,33 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    borderRadius: 20,
+    width: 36,
+    height: 36,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  cardContent: {
+  infoContainer: {
     padding: 12,
   },
-  productName: {
-    fontSize: 14,
+  name: {
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
   },
-  productCategory: {
-    fontSize: 12,
+  category: {
+    fontSize: 14,
     color: '#666',
     marginTop: 2,
   },
-  priceContainer: {
+  priceRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 8,
   },
-  productPrice: {
+  price: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#9b87f5',
@@ -135,10 +120,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  ratingText: {
+  rating: {
     fontSize: 12,
     color: '#666',
-    marginLeft: 2,
+    marginLeft: 4,
   },
 });
 
