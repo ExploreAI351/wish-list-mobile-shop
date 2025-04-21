@@ -11,7 +11,7 @@ import {
   User
 } from 'firebase/auth';
 import { auth, googleProvider } from '../lib/firebase';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 interface AuthContextType {
   currentUser: User | null;

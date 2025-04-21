@@ -2,6 +2,7 @@
 import React from 'react';
 import ProductCard from './ProductCard';
 import { Product } from '@/types/product';
+import { useNavigation } from '@react-navigation/native';
 
 interface ProductGridProps {
   products: Product[];
@@ -9,6 +10,8 @@ interface ProductGridProps {
 }
 
 const ProductGrid: React.FC<ProductGridProps> = ({ products, isLoading }) => {
+  const navigation = useNavigation();
+  
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -31,7 +34,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, isLoading }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard key={product.id} product={product} navigation={navigation} />
       ))}
     </div>
   );
