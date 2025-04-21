@@ -1,3 +1,4 @@
+
 # Welcome to your Lovable project
 
 ## Project info
@@ -71,3 +72,58 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+## How to run this app on mobile devices
+
+This app supports running on mobile devices through Capacitor, enabling native mobile capabilities.
+
+### Steps to run on mobile
+
+1. Clone the project locally and install dependencies:
+
+```sh
+git clone <YOUR_GIT_URL>
+cd <YOUR_PROJECT_NAME>
+npm install
+```
+
+2. Add native platforms (for iOS and/or Android):
+
+```sh
+npx cap add android
+npx cap add ios
+```
+
+3. Build the web assets:
+
+```sh
+npm run build
+```
+
+4. Sync the Capacitor native projects with the latest web build:
+
+```sh
+npx cap sync
+```
+
+5. Run the app on an emulator or a physical device:
+
+For Android:
+
+```sh
+npx cap run android
+```
+
+For iOS (requires MacOS and Xcode):
+
+```sh
+npx cap run ios
+```
+
+### Tips
+
+- After pulling new changes, always run `npm install` and then `npx cap sync` to keep your native projects up to date.
+- For iOS, open the native Xcode project in `ios/App/App.xcodeproj` and run it from there if preferred.
+- For Android, Android Studio can be used to open the native `android` folder and run/sync the app.
+- Read our blog post for more details on running mobile apps and native capabilities: https://lovable.dev/blogs/TODO
+
