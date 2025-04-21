@@ -127,3 +127,37 @@ npx cap run ios
 - For Android, Android Studio can be used to open the native `android` folder and run/sync the app.
 - Read our blog post for more details on running mobile apps and native capabilities: https://lovable.dev/blogs/TODO
 
+---
+
+### How to run this app with Expo CLI (mobile development)
+
+This project also supports running on mobile devices during development using Expo.
+
+#### Steps to run with Expo:
+
+1. Install Expo CLI globally if you haven't already:
+
+```sh
+npm install -g expo-cli
+```
+
+2. Start the Expo development server:
+
+```sh
+npm run dev
+```
+
+or directly start Expo:
+
+```sh
+expo start
+```
+
+3. Use the Expo Go app on your iOS or Android device to scan the QR code shown in the terminal or browser.
+
+4. Alternatively, you can run the app on your Android/iOS emulator from the Expo CLI interface.
+
+---
+
+This is a React Native mobile app using Expo and Capacitor for native capabilities.
+
