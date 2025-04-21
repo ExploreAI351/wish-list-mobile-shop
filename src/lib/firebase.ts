@@ -4,7 +4,8 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 // Your Firebase configuration
-// NOTE: Replace with your Firebase config when setting up
+// For a real app, these would be stored as environment variables accessed via process.env
+// In React Native, you might use react-native-dotenv or a similar package
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_AUTH_DOMAIN",

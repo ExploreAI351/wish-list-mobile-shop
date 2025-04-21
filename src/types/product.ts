@@ -6,5 +6,6 @@ export interface Product {
   image: string;
   description: string;
   category: string;
+  rating?: number;
   docId?: string; // Firebase document ID for wishlist items
 }

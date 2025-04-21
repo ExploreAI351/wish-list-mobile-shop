@@ -1,30 +1,25 @@
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
-import { useWishlist } from '@/contexts/WishlistContext';
-import { Product } from '@/types/product';
-import { Heart } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { cn } from '@/lib/utils';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useWishlist } from '../../contexts/WishlistContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { Product } from '../../types/product';
 
 interface ProductCardProps {
   product: Product;
+  navigation: any;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard = ({ product, navigation }: ProductCardProps) => {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const { currentUser } = useAuth();
-  const navigate = useNavigate();
   
   const isWishlisted = isInWishlist(product.id);
   
-  const handleWishlistToggle = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    
+  const handleWishlistToggle = () => {
     if (!currentUser) {
-      navigate('/login');
+      navigation.navigate('Login');
       return;
     }
     
@@ -35,56 +30,116 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     }
   };
   
-  const navigateToProduct = () => {
-    navigate(`/product/${product.id}`);
-  };
-  
   return (
-    <Card 
-      className="product-card overflow-hidden cursor-pointer"
-      onClick={navigateToProduct}
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => navigation.navigate('ProductDetails', { id: product.id })}
     >
-      <div className="relative h-48 overflow-hidden">
-        <img 
-          src={product.image} 
-          alt={product.name} 
-          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+      <View style={styles.imageContainer}>
+        <Image
+          source={{ uri: product.image }}
+          style={styles.image}
+          resizeMode="cover"
         />
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-2 right-2 rounded-full bg-white/80 hover:bg-white"
-          onClick={handleWishlistToggle}
+        <TouchableOpacity
+          style={styles.wishlistButton}
+          onPress={handleWishlistToggle}
         >
-          <Heart 
-            className={cn(
-              "h-5 w-5 transition-colors", 
-              isWishlisted ? "heart-icon active" : "text-gray-500"
-            )}
-            fill={isWishlisted ? "currentColor" : "none"}
+          <Ionicons
+            name={isWishlisted ? "heart" : "heart-outline"}
+            size={20}
+            color={isWishlisted ? "#9b87f5" : "#666"}
           />
-        </Button>
-      </div>
-      <CardContent className="p-4">
-        <h3 className="font-medium text-gray-900 truncate">{product.name}</h3>
-        <p className="text-sm text-gray-500 truncate">{product.category}</p>
-        <div className="mt-2 flex justify-between items-center">
-          <span className="text-lg font-bold text-wishlist-primary">${product.price.toFixed(2)}</span>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="text-xs border-wishlist-primary text-wishlist-primary hover:bg-wishlist-primary hover:text-white"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigateToProduct();
-            }}
-          >
-            View Details
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+        </TouchableOpacity>
+      </View>
+      
+      <View style={styles.cardContent}>
+        <Text style={styles.productName} numberOfLines={1}>
+          {product.name}
+        </Text>
+        <Text style={styles.productCategory} numberOfLines={1}>
+          {product.category}
+        </Text>
+        
+        <View style={styles.priceContainer}>
+          <Text style={styles.productPrice}>
+            ${product.price.toFixed(2)}
+          </Text>
+          <View style={styles.ratingContainer}>
+            <Ionicons name="star" size={12} color="#FFD700" />
+            <Text style={styles.ratingText}>{product.rating || 4.0}</Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  card: {
+    flex: 1,
+    margin: 8,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  imageContainer: {
+    position: 'relative',
+    height: 150,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  wishlistButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardContent: {
+    padding: 12,
+  },
+  productName: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  productCategory: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 2,
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  productPrice: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#9b87f5',
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  ratingText: {
+    fontSize: 12,
+    color: '#666',
+    marginLeft: 2,
+  },
+});
 
 export default ProductCard;

@@ -1,10 +1,9 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { collection, addDoc, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db } from '../lib/firebase';
 import { useAuth } from './AuthContext';
-import { Product } from '@/types/product';
-import { toast } from '@/components/ui/sonner';
+import { Product } from '../types/product';
 
 interface WishlistContextType {
   wishlistItems: Product[];
@@ -56,6 +55,7 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             image: data.image,
             description: data.description,
             category: data.category,
+            rating: data.rating || 4,
             docId: doc.id
           });
         });
@@ -63,7 +63,6 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setWishlistItems(items);
       } catch (error) {
         console.error('Error fetching wishlist:', error);
-        toast.error('Failed to load your wishlist');
       } finally {
         setIsLoading(false);
       }
@@ -74,7 +73,8 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const addToWishlist = async (product: Product) => {
     if (!currentUser) {
-      toast.error('Please login to add items to your wishlist');
+      // Alert could be replaced with a Toast or other notification in a real app
+      alert('Please login to add items to your wishlist');
       return;
     }
 
@@ -87,14 +87,16 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         image: product.image,
         description: product.description,
         category: product.category,
+        rating: product.rating || 4,
         createdAt: new Date()
       });
 
       setWishlistItems([...wishlistItems, { ...product, docId: docRef.id }]);
-      toast.success(`${product.name} added to wishlist!`);
+      // Success notification
+      alert(`${product.name} added to wishlist!`);
     } catch (error) {
       console.error('Error adding to wishlist:', error);
-      toast.error('Failed to add item to wishlist');
+      alert('Failed to add item to wishlist');
     }
   };
 
@@ -106,11 +108,12 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       if (itemToRemove && itemToRemove.docId) {
         await deleteDoc(doc(db, 'wishlists', itemToRemove.docId));
         setWishlistItems(wishlistItems.filter(item => item.id !== productId));
-        toast.success('Item removed from wishlist');
+        // Success notification
+        alert('Item removed from wishlist');
       }
     } catch (error) {
       console.error('Error removing from wishlist:', error);
-      toast.error('Failed to remove item from wishlist');
+      alert('Failed to remove item from wishlist');
     }
   };
 
